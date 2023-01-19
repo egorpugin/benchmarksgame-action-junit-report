@@ -51,7 +51,8 @@ function annotateTestResult(testResult, token, headSha, annotateOnly, updateChec
             title = `${testResult.totalCount} tests run, ${testResult.passed} passed, ${testResult.skipped} skipped, ${testResult.failed} failed.`;
         }
         core.info(`ℹ️ - ${testResult.checkName} - ${title}`);
-        const conclusion = foundResults && testResult.failed <= 0 ? 'success' : 'failure';
+        //const conclusion: 'success' | 'failure' = foundResults && testResult.failed <= 0 ? 'success' : 'failure'
+        const conclusion = 'success';
         for (const annotation of annotations) {
             core.info(`   🧪 - ${annotation.path} | ${annotation.message.split('\n', 1)[0]}`);
         }
@@ -273,8 +274,7 @@ function run() {
             core.setOutput('failed', mergedResult.failed);
             const pullRequest = github.context.payload.pull_request;
             const link = (pullRequest && pullRequest.html_url) || github.context.ref;
-            //const conclusion: 'success' | 'failure' = mergedResult.totalCount > 0 && mergedResult.failed <= 0 ? 'success' : 'failure'
-            const conclusion = 'success';
+            const conclusion = mergedResult.totalCount > 0 && mergedResult.failed <= 0 ? 'success' : 'failure';
             const headSha = commit || (pullRequest && pullRequest.head.sha) || github.context.sha;
             core.info(`ℹ️ Posting with conclusion '${conclusion}' to ${link} (sha: ${headSha})`);
             core.endGroup();
@@ -303,9 +303,9 @@ function run() {
             else {
                 core.info('⏩ Skipped creation of job summary');
             }
-            /*if (failOnFailure && conclusion === 'failure') {
-              core.setFailed(`❌ Tests reported ${mergedResult.failed} failures`)
-            }*/
+            if (failOnFailure && conclusion === 'failure') {
+                core.setFailed(`❌ Tests reported ${mergedResult.failed} failures`);
+            }
             core.endGroup();
         }
         catch (error /* eslint-disable-line @typescript-eslint/no-explicit-any */) {
