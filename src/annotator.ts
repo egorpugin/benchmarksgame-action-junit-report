@@ -25,7 +25,7 @@ export async function annotateTestResult(
   core.info(`ℹ️ - ${testResult.checkName} - ${title}`)
 
   //const conclusion: 'success' | 'failure' = foundResults && testResult.failed <= 0 ? 'success' : 'failure'
-  const conclusion = 'success';
+  const conclusion: 'success' | 'failure' = foundResults ? 'success' : 'failure';
 
   for (const annotation of annotations) {
     core.info(`   🧪 - ${annotation.path} | ${annotation.message.split('\n', 1)[0]}`)

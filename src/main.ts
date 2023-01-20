@@ -103,9 +103,9 @@ export async function run(): Promise<void> {
     core.startGroup(`🚀 Publish results`)
 
     try {
-      for (const testResult of testResults) {
+      /*for (const testResult of testResults) {
         await annotateTestResult(testResult, token, headSha, annotateOnly, updateCheck, annotateNotice, jobName)
-      }
+      }*/
     } catch (error) {
       core.error(`❌ Failed to create checks using the provided token. (${error})`)
       core.warning(

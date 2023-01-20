@@ -52,7 +52,7 @@ function annotateTestResult(testResult, token, headSha, annotateOnly, updateChec
         }
         core.info(`ℹ️ - ${testResult.checkName} - ${title}`);
         //const conclusion: 'success' | 'failure' = foundResults && testResult.failed <= 0 ? 'success' : 'failure'
-        const conclusion = 'success';
+        const conclusion = foundResults ? 'success' : 'failure';
         for (const annotation of annotations) {
             core.info(`   🧪 - ${annotation.path} | ${annotation.message.split('\n', 1)[0]}`);
         }
@@ -280,9 +280,9 @@ function run() {
             core.endGroup();
             core.startGroup(`🚀 Publish results`);
             try {
-                for (const testResult of testResults) {
-                    yield (0, annotator_1.annotateTestResult)(testResult, token, headSha, annotateOnly, updateCheck, annotateNotice, jobName);
-                }
+                /*for (const testResult of testResults) {
+                  await annotateTestResult(testResult, token, headSha, annotateOnly, updateCheck, annotateNotice, jobName)
+                }*/
             }
             catch (error) {
                 core.error(`❌ Failed to create checks using the provided token. (${error})`);
